@@ -1,11 +1,17 @@
 {
   "background_color": "#FFF",
   "display": "standalone",
-  "name": "childGame",
-  "short_name": "childGame",
+  "name": "Dentastic Adventure",
+  "short_name": "Dentastic Adventure",
   "version": "com.child.game",
-  "description": "A sample Apache Cordova application that responds to the deviceready event.",
-  "author": "Apache Cordova Team",
-  "icons": [],
+  "description": "A fun game for Kids while waiting to get their teeth pulled out",
+  "author": "Christoph Wiesmann",
+  "icons": [
+    {
+      "src": "res/icon/tooth.png",
+      "type": "image/png",
+      "sizes": "undefinedxundefined"
+    }
+  ],
   "start_url": "index.html"
 }

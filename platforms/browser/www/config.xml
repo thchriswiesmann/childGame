@@ -1,11 +1,11 @@
 <?xml version='1.0' encoding='utf-8'?>
 <widget id="com.child.game" version="1.0.0" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
-    <name>childGame</name>
+    <name>Dentastic Adventure</name>
     <description>
-        A sample Apache Cordova application that responds to the deviceready event.
+        A fun game for Kids while waiting to get their teeth pulled out
     </description>
-    <author email="dev@cordova.apache.org" href="http://cordova.io">
-        Apache Cordova Team
+    <author email="christoph.wiesmann1@stud.th-deg.de" href="https://th-deg.de">
+        Christoph Wiesmann
     </author>
     <content src="index.html" />
     <access origin="*" />
@@ -15,4 +15,5 @@
     <allow-intent href="sms:*" />
     <allow-intent href="mailto:*" />
     <allow-intent href="geo:*" />
+    <icon src="res/icon/tooth.png" />
 </widget>

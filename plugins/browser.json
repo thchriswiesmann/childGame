@@ -9,6 +9,9 @@
   "installed_plugins": {
     "cordova-plugin-whitelist": {
       "PACKAGE_NAME": "com.child.game"
+    },
+    "cordova-plugin-screen-orientation": {
+      "PACKAGE_NAME": "com.child.game"
     }
   },
   "dependent_plugins": {}
