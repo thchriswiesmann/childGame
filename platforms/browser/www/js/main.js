@@ -4,6 +4,9 @@ const HEIGHT = window.innerHeight;
 const LANE_WIDTH = WIDTH/5;
 const START_X = WIDTH/2;
 
+let dentist;
+let teethSpeed = 150;
+let teeth = [];
 
 
 
@@ -13,26 +16,42 @@ let application = new PIXI.Application({
     transparent: true,
 });
 
-
-application.renderer.interactive = true;
+window.app = application;
 
 $('.app').append(application.view);
 
-
-var dentist = new PIXI.Sprite.fromImage('/img/dentist.png');
+//Initialize Player
+dentist = new PIXI.Sprite.fromImage('/img/dentist.png');
 dentist.anchor.set(0.5);
 dentist.width = LANE_WIDTH;
-dentist.height = HEIGHT/10;
+dentist.height = LANE_WIDTH * 1.1;
 dentist.x = WIDTH/2;
 dentist.y = HEIGHT - dentist.height;
 dentist.lane = 0;
 
+//Initialize enemies(teeth)
+for (var i = 0; i<4; i++) {
+    var tooth = new PIXI.Sprite.fromImage('/img/tooth.png');
+    tooth.anchor.set(0.5);
+    tooth.x = WIDTH/2;
+    tooth.y = getRandomIntInclusive(-HEIGHT/2, HEIGHT/3);
+    tooth.width = LANE_WIDTH;
+    tooth.height = LANE_WIDTH;
+    tooth.lane = getRandomIntInclusive(-2, 2);
+    
+    teeth.push(tooth);
+}
+
+//add everything to the game
 application.stage.addChild(dentist);
 
+teeth.map(tooth => application.stage.addChild(tooth));
 
 
 
+application.renderer.interactive = true;
 application.renderer.plugins.interaction.on('pointerdown', move);
+
 
 function move(click) {
     let isMoveLeft = click.data.global.x <= application.renderer.width / 2;
@@ -46,7 +65,54 @@ function move(click) {
 
 application.ticker.add(dt => gameLoop(dt));
 
+
+
 function gameLoop(deltaTime) {
-    dentist.x = START_X + LANE_WIDTH * (dentist.lane/2);
+    //time in seconds
+    let time = application.ticker.elapsedMS /1000;
+    //update position of dentist
+    dentist.x = laneToX(dentist.lane, 2);
+    
+    //move teeth from top to bottom
+    var previousLane = teeth[0].lane;
+    teeth.map(tooth => {
+        //reset teeth from bottom to top
+        if (tooth.y > application.renderer.height + getRandomIntInclusive(1, 8) * tooth.height) {
+            tooth.y = 0;
+            tooth.lane = getRandomIntInclusive(-2, 2);
+        }
+        
+        //avoid two subsequent teeth on the same lane
+        if(previousLane == tooth.lane) {
+            if(previousLane == 2) {
+                //tooth.lane = getRandomIntInclusive(-2, 1);
+            }else {
+                tooth.lane += 1;
+            }
+        }
+        
+        
+        tooth.x = laneToX(tooth.lane, 1);
+        previousLane = tooth.lane;
+        tooth.y += teethSpeed * time;
+        
+        
+    })
+    
+    teethSpeed += 10 * time;
 } 
+
+function laneToX(lane, scale) {
+    return START_X + LANE_WIDTH * (lane/scale);
+}
+
+function getRandomIntInclusive(min, max) {
+    min = Math.ceil(min);
+    max = Math.floor(max);
+    return Math.floor(Math.random() * (max - min +1)) + min; 
+}
+
+
+
+
 
