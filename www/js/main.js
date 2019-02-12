@@ -20,7 +20,7 @@ window.app = application;
 
 $('.app').append(application.view);
 
-//Initialize Player
+//Initialize Player(dentist)
 dentist = new PIXI.Sprite.fromImage('/img/dentist.png');
 dentist.anchor.set(0.5);
 dentist.width = LANE_WIDTH;
@@ -70,8 +70,11 @@ application.ticker.add(dt => gameLoop(dt));
 function gameLoop(deltaTime) {
     //time in seconds
     let time = application.ticker.elapsedMS /1000;
+    
     //update position of dentist
     dentist.x = laneToX(dentist.lane, 2);
+    
+  
     
     //move teeth from top to bottom
     teeth.map(tooth => {
@@ -81,12 +84,13 @@ function gameLoop(deltaTime) {
             tooth.lane = getRandomIntInclusive(-2, 2);
         }
         
-        
-        
+        //Collision detection
+        if(tooth.lane == (dentist.lane/2) && dentist.y - dentist.height/2 < tooth.y + tooth.height/2) {
+            application.stop();
+        }
         
         tooth.x = laneToX(tooth.lane, 1);
         tooth.y += teethSpeed * time;
-        
         
     })
     
