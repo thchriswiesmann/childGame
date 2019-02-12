@@ -24,10 +24,10 @@ window.app = application;
 $('.app').append(application.view);
 
 //Initialize Player(dentist)
-dentist = new PIXI.Sprite.fromImage('/img/dentist.png');
+dentist = new PIXI.Sprite.fromImage('/img/waschbaer_300.png');
 dentist.anchor.set(0.5);
 dentist.width = LANE_WIDTH;
-dentist.height = LANE_WIDTH * 1.1;
+dentist.height = LANE_WIDTH * 1.13;
 dentist.x = WIDTH/2;
 dentist.y = HEIGHT - dentist.height;
 dentist.lane = 0;
