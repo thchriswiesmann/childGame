@@ -67,12 +67,12 @@ for (var i = 0; i<4; i++) {
 
 //add everything to the game
 application.stage.addChild(dentist);
+
+
+teeth.map(tooth => application.stage.addChild(tooth));
 application.stage.addChild(scoreText);
 application.stage.addChild(livesText);
 application.stage.addChild(restartText);
-
-teeth.map(tooth => application.stage.addChild(tooth));
-
 
 
 application.renderer.interactive = true;
@@ -140,7 +140,7 @@ function gameLoop(deltaTime) {
         }
         
         //Collision detection
-        if(tooth.lane == (dentist.lane/2) && dentist.y - dentist.height/2 < tooth.y + tooth.height/2 && !dentist.immortal) {
+        if(tooth.lane == (dentist.lane/2) && dentist.y - dentist.height/2 < tooth.y + tooth.height/2 && !dentist.immortal && !(dentist.y + dentist.height/2 < tooth.y - tooth.height/2)) {
             lives--;
             if(lives > 0) {
                 dentist.immortal = true;
