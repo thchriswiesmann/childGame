@@ -80,7 +80,7 @@ application.renderer.plugins.interaction.on('pointerdown', move);
 
 
 function move(click) {
-    let isMoveLeft = click.data.global.x <= dentist.x;
+    let isMoveLeft = click.data.global.x <= application.renderer.width / 2;
     
     if (isMoveLeft) {
         dentist.lane = Math.max(-4, dentist.lane - 1);
