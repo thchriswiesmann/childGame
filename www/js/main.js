@@ -25,12 +25,37 @@ window.app = application;
 
 $('.app').append(application.view);
 
+/*------------------textures------------------*/
+var img_background, img_background_menu, img_foreground, img_tooth, img_dentist;
+var tx_background, tx_background_menu, tx_foreground, tx_tooth, tx_dentist;
+
+img_background = new Image();
+img_background.src = '/img/mouth_background.png';
+img_background_menu = new Image();
+img_background_menu.src = '/img/mouth_background_menu.png';
+img_foreground = new Image();
+img_foreground.src = '/img/teeth_foreground.png'
+img_tooth = new Image();
+img_tooth.src = '/img/tooth.png'
+img_dentist = new Image();
+img_dentist.src = '/img/dentist.png'
+
+
+tx_background = new PIXI.Texture(new PIXI.BaseTexture(img_background));
+tx_background_menu = new PIXI.Texture(new PIXI.BaseTexture(img_background_menu));
+tx_foreground = new PIXI.Texture(new PIXI.BaseTexture(img_foreground));
+tx_tooth = new PIXI.Texture(new PIXI.BaseTexture(img_tooth));
+tx_dentist = new PIXI.Texture(new PIXI.BaseTexture(img_dentist));
+
+
+
+
 /*------------------Menu------------------*/
 let startScene = new PIXI.Container();
 startScene.visible = true;
 startScene.sortableChildren = true;
 //background
-menuBackground = new PIXI.Sprite.fromImage('/img/mouth_background_menu.png');
+menuBackground = new PIXI.Sprite(tx_background_menu);
 menuBackground.width = WIDTH;
 menuBackground.height= HEIGHT;
 //start Text
@@ -61,17 +86,17 @@ let gameScene = new PIXI.Container();
 gameScene.visible = false;
 
 //background
-gameBackground = new PIXI.Sprite.fromImage('/img/mouth_background.png');
+gameBackground = new PIXI.Sprite(tx_background);
 gameBackground.width = WIDTH;
 gameBackground.height= HEIGHT;
 //teeth foreground
-gameForeground = new PIXI.Sprite.fromImage('/img/teeth_foreground.png');
+gameForeground = new PIXI.Sprite(tx_foreground);
 gameForeground.width = WIDTH;
 gameForeground.height = WIDTH * 0.5;
 
 
 //Initialize Player(dentist)
-dentist = new PIXI.Sprite.fromImage('/img/waschbaer_150.png');
+dentist = new PIXI.Sprite(tx_dentist);
 dentist.anchor.set(0.5);
 dentist.width = LANE_WIDTH;
 dentist.height = dentist.width * 1.13;
@@ -130,7 +155,7 @@ menuButton.on('pointerdown', showMenu);
 
 //Initialize enemies(teeth)
 for (var i = 0; i<4; i++) {
-    var tooth = new PIXI.Sprite.fromImage('/img/tooth.png');
+    var tooth = new PIXI.Sprite(tx_tooth);
     tooth.anchor.set(0.5);
     tooth.x = WIDTH/2;
     tooth.y = getRandomIntInclusive(-HEIGHT/2, HEIGHT/3);
