@@ -27,7 +27,7 @@ $('.app').append(application.view);
 dentist = new PIXI.Sprite.fromImage('/img/waschbaer_150.png');
 dentist.anchor.set(0.5);
 dentist.width = LANE_WIDTH;
-dentist.height = LANE_WIDTH * 1.13;
+dentist.height = dentist.width * 1.13;
 dentist.x = WIDTH/2;
 dentist.y = HEIGHT - dentist.height;
 dentist.lane = 0;
@@ -54,12 +54,12 @@ restartText.on('pointerdown', restart);
 
 //Initialize enemies(teeth)
 for (var i = 0; i<4; i++) {
-    var tooth = new PIXI.Sprite.fromImage('/img/tooth.png');
+    var tooth = new PIXI.Sprite.fromImage('/img/zahn_150.png');
     tooth.anchor.set(0.5);
     tooth.x = WIDTH/2;
     tooth.y = getRandomIntInclusive(-HEIGHT/2, HEIGHT/3);
-    tooth.width = LANE_WIDTH;
-    tooth.height = LANE_WIDTH;
+    tooth.width = LANE_WIDTH * 0.9;
+    tooth.height = tooth.width * 1.188;
     tooth.lane = getRandomIntInclusive(-2, 2);
     
     teeth.push(tooth);
