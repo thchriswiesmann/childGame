@@ -6,7 +6,7 @@ const START_X = WIDTH/2;
 
 let dentist;
 let lives = 3;
-let livesText, scoreText, restartText;
+let livesText, scoreText, restartText, restartButton;
 let score = 0;
 let teethSpeed = 150;
 let teeth = [];
@@ -34,20 +34,31 @@ dentist.lane = 0;
 dentist.immortal = false;
 
 // Initialize UI
-livesText = new PIXI.Text("xxx", {font: "bold 32px Roboto", fill: '#e74c3c'});
+livesText = new PIXI.Text("xxx", {fontFamily: "Roboto", fontSize: 24, fontStyle: "bold", fill: '#e74c3c'});
 livesText.x = 0;
+livesText.y = 10;
 
-scoreText = new PIXI.Text("XX", {font: "bold 18px Roboto", fill: '#3f85e0'});
+scoreText = new PIXI.Text("XX", {fontFamily: "Roboto", fontSize: 18, fontStyle: "bold", fill: '#3f85e0'});
 scoreText.x = 0;
 scoreText.y = 50;
-
-restartText = new PIXI.Text("Nochmal", {font: "bold 18px Roboto", fill: '#3f85e0'});
-restartText.x = 0;
-restartText.y = 50;
+//Restart Text
+restartText = new PIXI.Text("Nochmal?", {fontFamily: "Roboto", fontSize: 30, fontStyle: "bold", fill: '#013220'});
+restartText.x = WIDTH/2;
+restartText.y = HEIGHT * 0.7;
+restartText.anchor.set(0.5);
+restartText.dropShadow = true;
 restartText.buttonMode = true;
 restartText.interactive = true;
 restartText.visible = false;
 restartText.on('pointerdown', restart);
+//Restart Button
+restartButton = new PIXI.Graphics();
+restartButton.beginFill(0x50c878);
+restartButton.drawRoundedRect(WIDTH/2-WIDTH/4, HEIGHT*0.7-HEIGHT/16, WIDTH/2, HEIGHT/8, 20);
+restartButton.buttonMode = true;
+restartButton.interactive = true;
+restartButton.visible = false;
+restartButton.on('pointerdown', restart);
 
 
 
@@ -72,6 +83,7 @@ application.stage.addChild(dentist);
 teeth.map(tooth => application.stage.addChild(tooth));
 application.stage.addChild(scoreText);
 application.stage.addChild(livesText);
+application.stage.addChild(restartButton);
 application.stage.addChild(restartText);
 
 
@@ -121,6 +133,7 @@ function gameLoop(deltaTime) {
         scoreText.y = application.renderer.height / 2 + 50;
         
         restartText.visible = true;
+        restartButton.visible = true;    
 
     }
     
@@ -171,14 +184,14 @@ function getRandomIntInclusive(min, max) {
 function restart() {
     lives = 3;
     restartText.visible = false;
+    restartButton.visible = false;
     time = 0;
+    score = 0;
     teethSpeed = 150;
     
     teeth.map(tooth => {
         tooth.x = WIDTH/2;
         tooth.y = getRandomIntInclusive(-HEIGHT/2, HEIGHT/3);
-        tooth.width = LANE_WIDTH;
-        tooth.height = LANE_WIDTH;
         tooth.lane = getRandomIntInclusive(-2, 2);
     })
     
