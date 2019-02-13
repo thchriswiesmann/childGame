@@ -6,7 +6,7 @@ const START_X = WIDTH/2;
 
 let dentist;
 let lives = 3;
-let livesText, scoreText, restartText, restartButton, startText, startButton;
+let livesText, scoreText, restartText, restartButton, startText, startButton, gameBackground, gameForeground, menuBackground;
 let score = 0;
 let teethSpeed = 150;
 let teeth = [];
@@ -29,6 +29,10 @@ $('.app').append(application.view);
 let startScene = new PIXI.Container();
 startScene.visible = true;
 startScene.sortableChildren = true;
+//background
+menuBackground = new PIXI.Sprite.fromImage('/img/mouth_background_menu.png');
+menuBackground.width = WIDTH;
+menuBackground.height= HEIGHT;
 //start Text
 startText = new PIXI.Text("Starten", {fontFamily: "Roboto", fontSize: 30, fontStyle: "bold", fill: '#013220'});
 startText.x = WIDTH/2;
@@ -50,12 +54,22 @@ startButton.interactive = true;
 startButton.visible = true;
 startButton.on('pointerdown', start);
 
-startScene.addChild(startButton)
-startScene.addChild(startText);
+
 
 /*------------------Game Window-----------*/
 let gameScene = new PIXI.Container();
 gameScene.visible = false;
+
+//background
+gameBackground = new PIXI.Sprite.fromImage('/img/mouth_background.png');
+gameBackground.width = WIDTH;
+gameBackground.height= HEIGHT;
+//teeth foreground
+gameForeground = new PIXI.Sprite.fromImage('/img/teeth_foreground.png');
+gameForeground.width = WIDTH;
+gameForeground.height = WIDTH * 0.5;
+
+
 //Initialize Player(dentist)
 dentist = new PIXI.Sprite.fromImage('/img/waschbaer_150.png');
 dentist.anchor.set(0.5);
@@ -67,7 +81,7 @@ dentist.lane = 0;
 dentist.immortal = false;
 
 // Initialize UI
-livesText = new PIXI.Text("xxx", {fontFamily: "Roboto", fontSize: 24, fontStyle: "bold", fill: '#e74c3c'});
+livesText = new PIXI.Text("xxx", {fontFamily: "Roboto", fontSize: 24, fontStyle: "bold", fill: '#8A0707'});
 livesText.x = 0;
 livesText.y = 10;
 
@@ -116,7 +130,7 @@ menuButton.on('pointerdown', showMenu);
 
 //Initialize enemies(teeth)
 for (var i = 0; i<4; i++) {
-    var tooth = new PIXI.Sprite.fromImage('/img/zahn_150_neu.png');
+    var tooth = new PIXI.Sprite.fromImage('/img/tooth.png');
     tooth.anchor.set(0.5);
     tooth.x = WIDTH/2;
     tooth.y = getRandomIntInclusive(-HEIGHT/2, HEIGHT/3);
@@ -127,15 +141,21 @@ for (var i = 0; i<4; i++) {
     teeth.push(tooth);
 }
 
-//add everything to the game
+//add everything to the game scene
+gameScene.addChild(gameBackground);
 gameScene.addChild(dentist);
 teeth.map(tooth => gameScene.addChild(tooth));
+gameScene.addChild(gameForeground);
 gameScene.addChild(scoreText);
 gameScene.addChild(livesText);
 gameScene.addChild(restartButton);
 gameScene.addChild(restartText);
 gameScene.addChild(menuButton);
 gameScene.addChild(menuText);
+//add everything to the main screen
+startScene.addChild(menuBackground);
+startScene.addChild(startButton)
+startScene.addChild(startText);
 
 
 application.stage.addChild(gameScene);
