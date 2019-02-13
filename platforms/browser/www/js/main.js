@@ -6,10 +6,12 @@ const START_X = WIDTH/2;
 
 let dentist;
 let lives = 3;
-let livesText, scoreText, restartText, restartButton;
+let livesText, scoreText, restartText, restartButton, startText, startButton;
 let score = 0;
 let teethSpeed = 150;
 let teeth = [];
+
+
 
 
 
@@ -23,6 +25,37 @@ window.app = application;
 
 $('.app').append(application.view);
 
+/*------------------Menu------------------*/
+let startScene = new PIXI.Container();
+startScene.visible = true;
+startScene.sortableChildren = true;
+//start Text
+startText = new PIXI.Text("Starten", {fontFamily: "Roboto", fontSize: 30, fontStyle: "bold", fill: '#013220'});
+startText.x = WIDTH/2;
+startText.y = HEIGHT * 0.7;
+startText.zIndex = 100;
+startText.anchor.set(0.5);
+startText.dropShadow = true;
+startText.buttonMode = true;
+startText.interactive = true;
+startText.visible = true;
+startText.on('pointerdown', start);
+//start Button
+startButton = new PIXI.Graphics();
+startButton.beginFill(0x50c878);
+startButton.drawRoundedRect(WIDTH/2-WIDTH/4, HEIGHT*0.7-HEIGHT/16, WIDTH/2, HEIGHT/8, 20);
+startButton.zIndex = 1;
+startButton.buttonMode = true;
+startButton.interactive = true;
+startButton.visible = true;
+startButton.on('pointerdown', start);
+
+startScene.addChild(startButton)
+startScene.addChild(startText);
+
+/*------------------Game Window-----------*/
+let gameScene = new PIXI.Container();
+gameScene.visible = false;
 //Initialize Player(dentist)
 dentist = new PIXI.Sprite.fromImage('/img/waschbaer_150.png');
 dentist.anchor.set(0.5);
@@ -59,13 +92,31 @@ restartButton.buttonMode = true;
 restartButton.interactive = true;
 restartButton.visible = false;
 restartButton.on('pointerdown', restart);
+//menu Text
+menuText = new PIXI.Text("Menü", {fontFamily: "Roboto", fontSize: 30, fontStyle: "bold", fill: '#ffffff'});
+menuText.x = WIDTH/6;
+menuText.y = HEIGHT/20;
+menuText.anchor.set(0.5);
+menuText.dropShadow = true;
+menuText.buttonMode = true;
+menuText.interactive = true;
+menuText.visible = false;
+menuText.on('pointerdown', showMenu);
+//menu Button
+menuButton = new PIXI.Graphics();
+menuButton.beginFill(0x8a0707);
+menuButton.drawRoundedRect(0, 0, WIDTH/3, HEIGHT/10, 20);
+menuButton.buttonMode = true;
+menuButton.interactive = true;
+menuButton.visible = false;
+menuButton.on('pointerdown', showMenu);
 
 
 
 
 //Initialize enemies(teeth)
 for (var i = 0; i<4; i++) {
-    var tooth = new PIXI.Sprite.fromImage('/img/zahn_150.png');
+    var tooth = new PIXI.Sprite.fromImage('/img/zahn_150_neu.png');
     tooth.anchor.set(0.5);
     tooth.x = WIDTH/2;
     tooth.y = getRandomIntInclusive(-HEIGHT/2, HEIGHT/3);
@@ -77,14 +128,18 @@ for (var i = 0; i<4; i++) {
 }
 
 //add everything to the game
-application.stage.addChild(dentist);
+gameScene.addChild(dentist);
+teeth.map(tooth => gameScene.addChild(tooth));
+gameScene.addChild(scoreText);
+gameScene.addChild(livesText);
+gameScene.addChild(restartButton);
+gameScene.addChild(restartText);
+gameScene.addChild(menuButton);
+gameScene.addChild(menuText);
 
 
-teeth.map(tooth => application.stage.addChild(tooth));
-application.stage.addChild(scoreText);
-application.stage.addChild(livesText);
-application.stage.addChild(restartButton);
-application.stage.addChild(restartText);
+application.stage.addChild(gameScene);
+application.stage.addChild(startScene);
 
 
 application.renderer.interactive = true;
@@ -109,6 +164,10 @@ function gameLoop(deltaTime) {
     //time in seconds
     let time = application.ticker.elapsedMS /1000;
     
+    if(gameScene.visible == false) {
+        time = 0;
+    }
+    
     //tint dentist in red when hit by tooth
     dentist.tint = dentist.immortal ? 0x8A0707 : 0xFFFFFF;
     
@@ -118,8 +177,6 @@ function gameLoop(deltaTime) {
         text = lives + "/3";
     } else {
         text = "GAME OVER!";
-        
-
         time = 0;
 
         livesText.scale.x = 1.3;
@@ -134,6 +191,9 @@ function gameLoop(deltaTime) {
         
         restartText.visible = true;
         restartButton.visible = true;    
+        
+        menuText.visible = true;
+        menuButton.visible = true;
 
     }
     
@@ -185,6 +245,8 @@ function restart() {
     lives = 3;
     restartText.visible = false;
     restartButton.visible = false;
+    menuText.visible = false;
+    menuButton.visible = false;
     time = 0;
     score = 0;
     teethSpeed = 150;
@@ -204,10 +266,18 @@ function restart() {
     scoreText.y = 50;
     scoreText.scale.x = 1;
     scoreText.scale.y = 1;
-    
 }
 
+ function start() {
+     startScene.visible = false;
+     gameScene.visible = true;
+     restart();
+ }
 
+function showMenu() {
+    gameScene.visible = false;
+    startScene.visible = true;
+}
 
 
 
