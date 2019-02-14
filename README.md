@@ -9,6 +9,6 @@
 >
 >Anschließend muss im Brower auf die Ansicht für Mobilgeräte geschaltet werden.
 Dies funktioniert z.B. über **Firefox** mit der Tastenkombination **Strg+Shift+M**.
->Zusätzlich muss die Berührungssimulation aktiviert sein
+>Zusätzlich muss die **Berührungssimulation** aktiviert sein
 >
 >Nach dem Kompilieren und Installieren auf Android werden leider die **Texturen nicht angezeigt**.
