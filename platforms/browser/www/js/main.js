@@ -1,20 +1,93 @@
+/**
+*   @author Christoph Wiesmann
+*   @description Die App funktioniert leider nur im Browser, wenn sie mittels dem cordova Kommandozeilentool mit dem Befehl 'cordova run browser' gestartet wird.
+*   Anschließend muss im Brower auf die Ansicht für Mobilgeräte geschaltet werden.
+*   Die funktioniert z.B. über Firefox mit der Tastenkkombination "Strg+Shift+M"
+*
+*   Nach dem Kompilieren und Installieren auf Android werden leider die texturen nicht angezeigt.
+*/
+
+
+/**
+*   the width of the game window in pixel
+*/
 const WIDTH = window.innerWidth;
+/**
+*   the height of the game window in pixel 
+*/
 const HEIGHT = window.innerHeight;
 
+/**
+*   the width of one lane in pixel. depending on the width of the game window
+*/
 const LANE_WIDTH = WIDTH/5;
+/**
+*   the start position ob the player sprite
+*/
 const START_X = WIDTH/2;
-
+/**
+*   variable that holds the players sprite
+*/
 let dentist;
+/**
+*   variable with the start amount of lives
+*/
 let lives = 3;
-let livesText, scoreText, restartText, restartButton, startText, startButton, gameBackground, gameForeground, menuBackground;
+/**
+*   PIXI Text with the current amount of lives
+*/
+let livesText;
+/**
+*   PIXI Text with the current amout of points
+*/
+let scoreText;
+/**
+*   PIXI Text on the restart button
+*/
+let restartText;
+/**
+*   PIXI Graphic with a rounded rectangle which functions as the restart Button
+*/
+let restartButton;
+/**
+*   PIXI Text on the start button
+*/
+let startText;
+/**
+*   PIXI Graphic with a rounded rectangle which functions as the st6art Button
+*/
+let startButton;
+/**
+*   PIXI sprite for the game scene background        
+*/
+let gameBackground;
+/**
+*   PIXI sprite for the game scene foreground   
+*/
+let gameForeground;
+/**
+*   PIXI sprite for the menu scene background  
+*/
+let menuBackground;
+/**
+*   variable that holds the current score. starts at 0  
+*/
 let score = 0;
+/**
+*   variable that holds the speed of the enemies. starts at 150   
+*/
 let teethSpeed = 150;
+/**
+*   array, that holds all enemies  
+*/
 let teeth = [];
 
 
 
 
-
+/**
+*   represents the PIXI Application  
+*/
 let application = new PIXI.Application({
     width: WIDTH,
     height: HEIGHT,
@@ -26,8 +99,47 @@ window.app = application;
 $('.app').append(application.view);
 
 /*------------------textures------------------*/
-var img_background, img_background_menu, img_foreground, img_tooth, img_dentist;
-var tx_background, tx_background_menu, tx_foreground, tx_tooth, tx_dentist;
+/**
+*   Image object for the game scene background   
+*/
+var img_background;
+/**
+*   Image object for the menu scnene background  
+*/
+var img_background_menu;
+/**
+*   Image object for the game scene foreground  
+*/
+var img_foreground;
+/**
+*   Image object for the enemy (Tooth)  
+*/
+var img_tooth;
+/**
+*   Image object for the player (dentist)  
+*/
+var img_dentist;
+
+/**
+*   PIXI Texture for game scene background  
+*/
+var tx_background;
+/**
+*   PIXI texture for menu scene background  
+*/
+var tx_background_menu;
+/**
+*   PIXI texture for the game scene foreground  
+*/
+var tx_foreground;
+/**
+*   PIXI texture for the enemy (tooth)  
+*/
+var tx_tooth;
+/**
+*   PIXI texture for the player (dentist)  
+*/
+var tx_dentist;
 
 img_background = new Image();
 img_background.src = '/img/mouth_background.png';
@@ -51,6 +163,9 @@ tx_dentist = new PIXI.Texture(new PIXI.BaseTexture(img_dentist));
 
 
 /*------------------Menu------------------*/
+/**
+*   PIXI container that hold the menu scene   
+*/
 let startScene = new PIXI.Container();
 startScene.visible = true;
 startScene.sortableChildren = true;
@@ -82,6 +197,9 @@ startButton.on('pointerdown', start);
 
 
 /*------------------Game Window-----------*/
+/**
+*   PIXI container that holds the game scene   
+*/
 let gameScene = new PIXI.Container();
 gameScene.visible = false;
 
@@ -190,7 +308,9 @@ application.stage.addChild(startScene);
 application.renderer.interactive = true;
 application.renderer.plugins.interaction.on('pointerdown', move);
 
-
+/**
+*   a function to move the player by clicking eather on his left or right side   
+*/
 function move(click) {
     let isMoveLeft = click.data.global.x <= dentist.x;
     
@@ -204,7 +324,10 @@ function move(click) {
 application.ticker.add(dt => gameLoop(dt));
 
 
-
+/**
+*   @description This funktion is executed every frame
+*   @param deltaTime
+*/
 function gameLoop(deltaTime) {
     //time in seconds
     let time = application.ticker.elapsedMS /1000;
@@ -276,16 +399,32 @@ function gameLoop(deltaTime) {
     scoreText.text = "Punkte: " + Math.round(score);
 } 
 
+
+/**
+*   @description function to return the x coordinate of an object on a certain lane
+*   @param {number} lane the number of the lane of which the x coordinate is wanted
+*   @param {number} scale a number through which the number of the lane will be divided
+*   @returns {number} the x coodinate according to the given lane
+*/
 function laneToX(lane, scale) {
     return START_X + LANE_WIDTH * (lane/scale);
 }
 
+/**
+*   @description a function to return a random number within two boundaries including the maximum and the minimum boundary
+*   @param {number} min the minimum value (inclusive)
+*   @param {number} max the maximum value (inclusive)
+*   @returns {number} random number between min and max, including min and max
+*/
 function getRandomIntInclusive(min, max) {
     min = Math.ceil(min);
     max = Math.floor(max);
     return Math.floor(Math.random() * (max - min +1)) + min; 
 }
 
+/**
+*   @description a function to restart the game by resetting the number of lives and resetting the position of the textures to the start position
+*/
 function restart() {
     lives = 3;
     restartText.visible = false;
@@ -313,12 +452,18 @@ function restart() {
     scoreText.scale.y = 1;
 }
 
+/**
+*   @description a function to start the game through making the menu scene invisible and the game scene visible
+*/
  function start() {
      startScene.visible = false;
      gameScene.visible = true;
      restart();
  }
 
+/**
+*   @description a function to change from the game scene to the menu scene through setting the game scene to invisible and the menu scene to visible
+*/
 function showMenu() {
     gameScene.visible = false;
     startScene.visible = true;
