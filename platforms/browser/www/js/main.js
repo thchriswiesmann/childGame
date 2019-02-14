@@ -325,7 +325,7 @@ application.ticker.add(dt => gameLoop(dt));
 
 
 /**
-*   @description This funktion is executed every frame
+*   @description This funktion is executed once every frame
 *   @param deltaTime
 */
 function gameLoop(deltaTime) {
